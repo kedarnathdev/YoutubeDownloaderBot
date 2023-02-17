@@ -1,0 +1,7 @@
+pyaes==1.6.1
+Pyrogram==2.0.99
+PySocks==1.7.1
+python-dotenv==0.21.1
+pytube==12.1.2
+TgCrypto==1.2.5
+wget==3.2
