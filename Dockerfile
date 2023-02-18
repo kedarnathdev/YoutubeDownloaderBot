@@ -1,5 +1,5 @@
 FROM public.ecr.aws/docker/library/python:3.8-slim-buster
-RUN docker purge system
+RUN docker purge system --force --all
 EXPOSE 8080
 WORKDIR /app
 COPY main.py main.py
