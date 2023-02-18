@@ -1,4 +1,4 @@
-FROM public.ecr.aws/lambda/python:3.8
+FROM public.ecr.aws/bitnami/python:3.9
 EXPOSE 8080
 WORKDIR /app
 COPY main.py main.py
