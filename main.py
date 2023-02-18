@@ -77,9 +77,9 @@ def handle_callback(client, callbackData):
         global video
         y = yt.streams.get_by_itag(int(callbackData.data))
         video = y
+        global msg
+        msg = bot.send_message(chat_id=url.chat.id, text="Starting download..")
         if y.mime_type == 'video/mp4':
-            global msg
-            msg = bot.send_message(chat_id=url.chat.id, text="Starting download..")
             wget.download(yt.thumbnail_url, out="thumb.jpg")
             y.download(output_path=os.getcwd(), filename="video.mp4")
             bot.send_video(chat_id=url.chat.id, video=open("video.mp4", "rb"), thumb="thumb.jpg", duration=yt.length, file_name=y.default_filename, supports_streaming=True, progress=progress)
@@ -88,7 +88,7 @@ def handle_callback(client, callbackData):
         else:
             wget.download(yt.thumbnail_url, out="thumb.jpg")
             y.download(output_path=os.getcwd(), filename="music.mp3")
-            bot.send_audio(chat_id=url.chat.id, audio=open("music.mp3", "rb"), file_name=y.default_filename[:len(y.default_filename)-3]+'.mp3', duration=yt.length, thumb="thumb.jpg")
+            bot.send_audio(chat_id=url.chat.id, audio=open("music.mp3", "rb"), file_name=y.default_filename[:len(y.default_filename)-3]+'.mp3', duration=yt.length, title=y.default_filename[:len(y.default_filename)-3], thumb="thumb.jpg", progress=progress, performer=yt.author)
             os.remove("music.mp3")
             os.remove("thumb.jpg")
 
