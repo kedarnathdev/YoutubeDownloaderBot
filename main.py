@@ -18,6 +18,28 @@ bot = Client(
     bot_token=os.getenv('BOT_TOKEN')
 )
 
+def progress_callback(stream, chunk, bytes_remaining):
+    size = video.filesize
+    progress = int(((size - bytes_remaining) / size) * 100)
+    # print(progress)
+    if progress%15==0:
+        try:
+            bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text=f"Downloading {progress} %")
+        except:
+            pass
+def complete_callback(stream, file_handle):
+    # print("downloading finished")
+    bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text="downloading finished")
+def progress(current, total):
+    # print(f"{current * 100 / total:.1f}%")
+    progress = int(current*100/total)
+    if progress%25==0:
+        try:
+            bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text=f"Uploading to telegram {progress} %")
+        except:
+            pass
+
+
 def fetchVideoQualities(message):
     l = []
     keyboardYT = IKM(l)
@@ -53,11 +75,17 @@ def handle_callback(client, callbackData):
         fetchAudioQualities(message=url)
     else:
         yt = YouTube(url.text)
+        yt.register_on_progress_callback(progress_callback)
+        yt.register_on_complete_callback(complete_callback)
+        global video
         y = yt.streams.get_by_itag(int(callbackData.data))
+        video = y
         if y.mime_type == 'video/mp4':
+            global msg
+            msg = bot.send_message(chat_id=url.chat.id, text="Starting download..")
             wget.download(yt.thumbnail_url, out="thumb.jpg")
             y.download(output_path=os.getcwd(), filename="video.mp4")
-            bot.send_video(chat_id=url.chat.id, video=open("video.mp4", "rb"), thumb="thumb.jpg", duration=yt.length, file_name=y.default_filename, supports_streaming=True)
+            bot.send_video(chat_id=url.chat.id, video=open("video.mp4", "rb"), thumb="thumb.jpg", duration=yt.length, file_name=y.default_filename, supports_streaming=True, progress=progress)
             os.remove("video.mp4")
             os.remove("thumb.jpg")
         else:
