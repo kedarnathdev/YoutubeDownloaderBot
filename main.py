@@ -21,17 +21,14 @@ bot = Client(
 def progress_callback(stream, chunk, bytes_remaining):
     size = video.filesize
     progress = int(((size - bytes_remaining) / size) * 100)
-    # print(progress)
     if progress%15==0:
         try:
             bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text=f"Downloading {progress} %")
         except:
             pass
 def complete_callback(stream, file_handle):
-    # print("downloading finished")
     bot.edit_message_text(chat_id=msg.chat.id, message_id=msg.id, text="downloading finished")
 def progress(current, total):
-    # print(f"{current * 100 / total:.1f}%")
     progress = int(current*100/total)
     if progress%25==0:
         try:
