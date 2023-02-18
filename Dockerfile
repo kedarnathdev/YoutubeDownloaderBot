@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM public.ecr.aws/lambda/python:3.8
 EXPOSE 8080
 WORKDIR /app
 COPY main.py main.py
