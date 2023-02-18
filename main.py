@@ -57,6 +57,15 @@ def fetchAudioQualities(message):
 @bot.on_message(filters.command(['start']))
 def handle_message(client, message):
     bot.send_message(chat_id=message.chat.id, text="Welcome! to ytdownloadertgbot.")
+    
+@bot.on_message(filters.command(['delete']))
+def handle_delete(client, message):
+    for i in os.listdir():
+        if i.endswith('.py') or i.endswith('.txt'):
+            pass
+        else:
+            os.remove(i)
+            bot.send_message(chat_id=message.chat.id, text=f"Successfully deleted {i}")
 
 @bot.on_message(filters.private)
 def handle_urls(client, message):
