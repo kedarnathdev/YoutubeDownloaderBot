@@ -63,7 +63,7 @@ def handle_message(client, message):
 @bot.on_message(filters.command(['delete']))
 def handle_delete(client, message):
     for i in os.listdir():
-        if i.endswith('.py') or i.endswith('.txt'):
+        if i.endswith('.py') or i.endswith('.txt') or i == "Dockerfile":
             pass
         else:
             os.remove(i)
