@@ -2,6 +2,7 @@ from pytube import YouTube
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton as IKB, InlineKeyboardMarkup as IKM
 from dotenv import load_dotenv
+import yt_dlp
 import os
 import wget
 
@@ -38,22 +39,6 @@ def progress(current, total):
         except:
             pass
 
-
-def fetchVideoQualities(message):
-    l = []
-    keyboardYT = IKM(l)
-    y = YouTube(message.text).streams.filter(mime_type='video/mp4', progressive=True)
-    for i in y:
-        l.append([IKB(text=f'{i.resolution} Video 📽️ {i.filesize_mb} MB', callback_data=str(i.itag))])
-    bot.send_message(chat_id=message.chat.id, text='Available Qualities', reply_markup=keyboardYT)
-
-def fetchAudioQualities(message):
-    l = []
-    keyboardYT = IKM(l)
-    y = YouTube(message.text).streams.filter(only_audio=True)
-    for i in y:
-        l.append([IKB(text=f'{i.abr} Audio 🔉 {i.filesize_mb} MB', callback_data=str(i.itag))])
-    bot.send_message(chat_id=message.chat.id, text='Available Qualities', reply_markup=keyboardYT)
 
 
 @bot.on_message(filters.command(['start']))
