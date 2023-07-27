@@ -1,2 +1,2 @@
-web: python -m http.server 8000
+web: python -m http.server $PORT
 worker: python main.py
